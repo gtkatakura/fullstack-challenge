@@ -1,1 +1,3 @@
-export { default as UserLoader } from '../modules/user/UserLoader';
+import * as UserLoader from '../modules/user/UserLoader';
+
+export { UserLoader }

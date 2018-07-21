@@ -1,14 +1,14 @@
 //
 import 'isomorphic-fetch';
 
-import * as Koa from 'koa';
-import * as bodyParser from 'koa-bodyparser';
+import Koa from 'koa';
+import bodyParser from 'koa-bodyparser';
 import convert from 'koa-convert';
-import * as cors from 'kcors';
+import cors from 'kcors';
 import graphqlHttp from 'koa-graphql';
 import graphqlBatchHttpWrapper from 'koa-graphql-batch';
-import * as logger from 'koa-logger';
-import * as Router from 'koa-router';
+import logger from 'koa-logger';
+import Router from 'koa-router';
 // import { print } from 'graphql/language';
 import { graphiqlKoa } from 'apollo-server-koa';
 

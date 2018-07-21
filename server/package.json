@@ -27,7 +27,18 @@
     "mongoose": "^5.0.8",
     "subscriptions-transport-ws": "^0.9.6"
   },
+  "resolutions": {
+    "babel-core": "^7.0.0-bridge.0"
+  },
   "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.54",
+    "@babel/core": "^7.0.0-beta.54",
+    "@babel/node": "^7.0.0-beta.54",
+    "@babel/preset-env": "^7.0.0-beta.54",
+    "@babel/preset-stage-0": "^7.0.0-beta.54",
+    "@babel/preset-stage-3": "^7.0.0-beta.54",
+    "@babel/preset-typescript": "^7.0.0-beta.54",
+    "@babel/register": "^7.0.0-beta.54",
     "@types/babel-core": "^6.25.5",
     "@types/bcryptjs": "^2.4.1",
     "@types/dotenv-safe": "^5.0.0",
@@ -48,17 +59,9 @@
     "@types/mongoose": "^5.2.1",
     "@types/prettier": "^1.13.2",
     "@types/rimraf": "^2.0.2",
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.2",
     "babel-jest": "22.4.3",
-    "babel-plugin-transform-async-to-generator": "^6.24.1",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-export-extensions": "^6.22.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1",
+    "babel-plugin-module-resolver": "^3.1.1",
     "eslint": "^4.14.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.8.0",
@@ -73,7 +76,8 @@
     "repl": "^0.1.3",
     "repl-promised": "^0.1.0",
     "repl.history": "^0.1.4",
-    "rimraf": "^2.6.2"
+    "rimraf": "^2.6.2",
+    "typescript": "^2.9.2"
   },
   "jest": {
     "testEnvironment": "<rootDir>/test/environment/mongodb",
@@ -110,6 +114,6 @@
     "test": "jest --coverage",
     "test:watch": "jest --watch --coverage",
     "update-schema": "babel-node ./scripts/updateSchema.js",
-    "watch": "nodemon src/index.js --exec babel-node"
+    "watch": "nodemon index.ts babel-node --extensions '.ts,.tsx'"
   }
 }

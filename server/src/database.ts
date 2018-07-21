@@ -1,6 +1,6 @@
 //
 
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import { databaseConfig } from './config';
 
 export function connectDatabase() {

@@ -1,15 +1,17 @@
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "node": "current"
       }
-    }]
+    }],
+    "@babel/stage-3",
+    "@babel/typescript"
   ],
   "plugins": [
-    "transform-object-rest-spread",
-    "transform-class-properties",
-    "transform-export-extensions",
-    "transform-async-to-generator"
+    ["module-resolver", {
+      "extensions": [".js", ".jsx", ".ts", ".tsx"],
+      "root": ["./src"]
+    }]
   ]
 }
