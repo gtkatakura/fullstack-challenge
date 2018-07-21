@@ -105,7 +105,7 @@
     ]
   },
   "scripts": {
-    "build": "npm run clear && babel src --ignore *.spec.js --out-dir dist --copy-files",
+    "build": "npm run clear && babel src --ignore *.spec.js --out-dir dist --extensions \".ts,.tsx\"",
     "clear": "rimraf ./dist",
     "lint": "eslint src/**",
     "precommit": "lint-staged",
