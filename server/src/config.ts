@@ -1,6 +1,6 @@
 //
-import path from 'path';
-import dotenvSafe from 'dotenv-safe';
+import * as path from 'path';
+import * as dotenvSafe from 'dotenv-safe';
 
 const root = path.join.bind(this, __dirname, '../');
 

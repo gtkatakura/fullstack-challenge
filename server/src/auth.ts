@@ -1,6 +1,6 @@
 //
 
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 import { User } from './model';
 import { jwtSecret } from './config';
 

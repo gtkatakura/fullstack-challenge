@@ -1,5 +1,5 @@
 //
-import DataLoader from 'dataloader';
+import * as DataLoader from 'dataloader';
 import { User as UserModel } from '../../model/index';
 import { connectionFromMongoCursor, mongooseLoader } from '@entria/graphql-mongoose-loader';
 
