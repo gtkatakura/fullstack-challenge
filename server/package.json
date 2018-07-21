@@ -114,6 +114,7 @@
     "test": "jest --coverage",
     "test:watch": "jest --watch --coverage",
     "update-schema": "babel-node ./scripts/updateSchema.js",
-    "watch": "nodemon index.ts babel-node --extensions '.ts,.tsx'"
+    "watch": "nodemon index.ts babel-node --extensions '.ts,.tsx'",
+    "typecheck": "tsc"
   }
 }
