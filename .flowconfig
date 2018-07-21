@@ -1,6 +1,5 @@
 [ignore]
-# ignore everything under tests
-<PROJECT_ROOT>/__tests__/.*
+.*/__tests__
 
 [include]
 
