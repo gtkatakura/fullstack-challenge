@@ -1,4 +1,4 @@
-// @flow
+//
 
 import mongoose from 'mongoose';
 
@@ -49,7 +49,7 @@ export async function clearDbAndRestartCounters() {
   createRows.restartCounters();
 }
 
-export function getContext(context: Object) {
+export function getContext(context) {
   const dataloaders = Object.keys(loaders).reduce(
     (prev, loaderKey) => ({
       ...prev,
@@ -66,7 +66,7 @@ export function getContext(context: Object) {
 }
 
 // @TODO Make those two functions a separated npm package.
-function sanitizeValue(value: Object, field: ?string, keysToFreeze: string[]) {
+function sanitizeValue(value, field, keysToFreeze) {
   // If this current field is specified on the `keysToFreeze` array, we simply redefine it
   // so it stays the same on the snapshot
   if (field && keysToFreeze.indexOf(field) !== -1) {
@@ -112,8 +112,8 @@ function sanitizeValue(value: Object, field: ?string, keysToFreeze: string[]) {
  * Sanitize a test object removing the mentions of a `ObjectId` from Mongoose and also
  *  stringifying any other object into a valid, "snapshotable", representation.
  */
-export function sanitizeTestObject(payload: Object, keysToFreeze: string[] = ['id'], ignore: string[] = ['password']) {
-  return Object.keys(payload).reduce((sanitizedObj: Object, field: string) => {
+export function sanitizeTestObject(payload, keysToFreeze = ['id'], ignore = ['password']) {
+  return Object.keys(payload).reduce((sanitizedObj, field) => {
     if (ignore.indexOf(field) !== -1) {
       return sanitizedObj;
     }

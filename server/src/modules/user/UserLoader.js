@@ -1,28 +1,10 @@
-// @flow
+//
 import DataLoader from 'dataloader';
 import { User as UserModel } from '../../model/index';
 import { connectionFromMongoCursor, mongooseLoader } from '@entria/graphql-mongoose-loader';
 
-import type { ConnectionArguments } from 'graphql-relay';
-import type { GraphQLContext } from '../../TypeDefinition';
-
-type UserType = {
-  id: string,
-  _id: string,
-  name: string,
-  password: string,
-  email: string,
-  active: boolean,
-};
-
 export default class User {
-  id: string;
-  _id: string;
-  name: string;
-  email: string;
-  active: boolean;
-
-  constructor(data: UserType, { user }: GraphQLContext) {
+  constructor(data, { user }) {
     this.id = data.id;
     this._id = data._id;
     this.name = data.name;
@@ -42,7 +24,7 @@ const viewerCanSee = (context, data) => {
   return true;
 };
 
-export const load = async (context: GraphQLContext, id: string): Promise<?User> => {
+export const load = async (context, id) => {
   if (!id) {
     return null;
   }
@@ -56,11 +38,11 @@ export const load = async (context: GraphQLContext, id: string): Promise<?User> 
   return viewerCanSee(context, data) ? new User(data, context) : null;
 };
 
-export const clearCache = ({ dataloaders }: GraphQLContext, id: string) => {
+export const clearCache = ({ dataloaders }, id) => {
   return dataloaders.UserLoader.clear(id.toString());
 };
 
-export const loadUsers = async (context: GraphQLContext, args: ConnectionArguments) => {
+export const loadUsers = async (context, args) => {
   const where = args.search ? { name: { $regex: new RegExp(`^${args.search}`, 'ig') } } : {};
   const users = UserModel.find(where, { _id: 1 }).sort({ createdAt: -1 });
 

@@ -1,10 +1,9 @@
-// @flow
+//
 import { fromGlobalId, nodeDefinitions } from 'graphql-relay';
-import type { GraphQLObjectType } from 'graphql';
 
 const registeredTypes = {};
 
-export function registerType(type: GraphQLObjectType) {
+export function registerType(type) {
   registeredTypes[type.name] = type;
   return type;
 }
