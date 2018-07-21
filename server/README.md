@@ -73,16 +73,6 @@ npm run build
 npm start
 ```
 
-### Flow
-```bash
-npm run flow
-```
-
-Or
-```bash
-flow
-```
-
 ### REPL server
 ```bash
 npm run repl

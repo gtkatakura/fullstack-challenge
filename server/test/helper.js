@@ -27,7 +27,6 @@ mongoose.Promise = Promise;
 // jest does this automatically for you if no NODE_ENV is set
 
 export async function connectMongoose() {
-  // // $FlowExpectedError setTimeout is not defined on JestObject
   // jest.setTimeout(20000);
   return mongoose.connect(global.__MONGO_URI__, {
     ...mongooseOptions,

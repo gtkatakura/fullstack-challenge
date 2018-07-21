@@ -35,7 +35,6 @@ function preprocess(input) {
 function myEval(cmd, context, filename, callback) {
   const code = babel.transform(preprocess(cmd), {
     presets: [
-      'flow',
       [
         'env',
         {
@@ -45,7 +44,6 @@ function myEval(cmd, context, filename, callback) {
         },
       ],
     ],
-    plugins: [['babel-plugin-transform-flow-strip-types']],
   }).code;
   _eval(code, context, filename, callback);
 }
