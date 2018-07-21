@@ -1,10 +1,10 @@
 //
 
-import { GraphQLObjectType } from 'graphql';
+import { GraphQLObjectType } from 'graphql'
 
-import LoginEmail from '../mutation/LoginEmailMutation';
-import RegisterEmail from '../mutation/RegisterEmailMutation';
-import ChangePassword from '../mutation/ChangePasswordMutation';
+import LoginEmail from '../mutation/LoginEmailMutation'
+import RegisterEmail from '../mutation/RegisterEmailMutation'
+import ChangePassword from '../mutation/ChangePasswordMutation'
 
 export default new GraphQLObjectType({
   name: 'Mutation',
@@ -14,4 +14,4 @@ export default new GraphQLObjectType({
     RegisterEmail,
     ChangePassword,
   }),
-});
+})
