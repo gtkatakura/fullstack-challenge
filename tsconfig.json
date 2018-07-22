@@ -2,7 +2,7 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "target": "es5",
-    "strict": false,
+    "strict": true,
     "noEmit": true
   }
 }
