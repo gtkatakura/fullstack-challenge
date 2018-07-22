@@ -2,37 +2,40 @@
 
 import mongoose from 'mongoose'
 import bcrypt from 'bcryptjs'
+import { Schema } from 'inspector'
+import { ModelFromSchemaDefinition } from '../../types/mongoose'
 
-const Schema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-    },
-    password: {
-      type: String,
-      hidden: true,
-    },
-    email: {
-      type: String,
-      required: false,
-      index: true,
-    },
-    active: {
-      type: Boolean,
-      default: true,
-    },
+const definition = {
+  name: {
+    type: String,
+    required: true,
   },
-  {
-    timestamps: {
-      createdAt: 'createdAt',
-      updatedAt: 'updatedAt',
-    },
-    collection: 'user',
+  password: {
+    type: String,
+    hidden: true,
   },
-)
+  email: {
+    type: String,
+    required: false,
+    index: true,
+  },
+  active: {
+    type: Boolean,
+    default: true,
+  },
+}
 
-Schema.pre('save', function (next) {
+export type IUser = ModelFromSchemaDefinition<typeof definition> & mongoose.Document
+
+const Schema = new mongoose.Schema(definition, {
+  timestamps: {
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+  },
+  collection: 'user',
+})
+
+Schema.pre<IUser>('save', function (next) {
   // Hash the password
   if (this.isModified('password')) {
     this.password = this.encryptPassword(this.password)
@@ -50,4 +53,4 @@ Schema.methods = {
   },
 }
 
-export default mongoose.model('User', Schema)
+export default mongoose.model<IUser>('User', Schema)

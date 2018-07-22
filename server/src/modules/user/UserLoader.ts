@@ -2,9 +2,16 @@
 import DataLoader from 'dataloader'
 import { User as UserModel } from '../../model/index'
 import { connectionFromMongoCursor, mongooseLoader } from '@entria/graphql-mongoose-loader'
+import { IUser } from './UserModel'
 
-export default class User {
-  constructor (data, { user }) {
+export default class User implements Partial<IUser> {
+  id: string
+  _id: string
+  name: string
+  email?: string
+  active?: boolean
+
+  constructor (data: IUser, { user }: { user?: IUser }) {
     this.id = data.id
     this._id = data._id
     this.name = data.name
