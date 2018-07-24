@@ -253,20 +253,20 @@ export type Thunk<T> = (() => T) | T;
  *     });
  *
  */
-export class GraphQLScalarType {
+export class GraphQLScalarType<TInternal = any, TExternal = TInternal> {
     name: string;
     description: Maybe<string>;
     astNode?: Maybe<ScalarTypeDefinitionNode>;
     constructor(config: GraphQLScalarTypeConfig<any, any>);
 
     // Serializes an internal value to include in a response.
-    serialize(value: any): any;
+    serialize(value: any): TExternal;
 
     // Parses an externally provided value to use as an input.
-    parseValue(value: any): any;
+    parseValue(value: any): TInternal;
 
     // Parses an externally provided literal value to use as an input.
-    parseLiteral(valueNode: ValueNode, variables?: Maybe<{ [key: string]: any }>): any;
+    parseLiteral(valueNode: ValueNode, variables?: Maybe<{ [key: string]: any }>): Maybe<TInternal>;
 
     toString(): string;
     toJSON(): string;
