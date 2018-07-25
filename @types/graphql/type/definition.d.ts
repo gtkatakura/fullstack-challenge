@@ -319,25 +319,35 @@ export interface GraphQLScalarTypeConfig<TInternal, TExternal> {
  *     });
  *
  */
-export class GraphQLObjectType {
+export class GraphQLObjectType<
+    TSource = any,
+    TContext = any,
+    TConfig extends GraphQLObjectTypeConfig<TSource, TContext> = any,
+> {
     name: string;
     description: Maybe<string>;
     astNode: Maybe<ObjectTypeDefinitionNode>;
     extensionASTNodes: Maybe<ReadonlyArray<ObjectTypeExtensionNode>>;
     isTypeOf: Maybe<GraphQLIsTypeOfFn<any, any>>;
 
-    constructor(config: GraphQLObjectTypeConfig<any, any>);
-    getFields(): GraphQLFieldMap<any, any>;
+    constructor(config: TConfig & GraphQLObjectTypeConfig<TSource, TContext, Unthunk<TConfig['fields']>>);
+    getFields(): GraphQLFieldMap<TSource, TContext>;
     getInterfaces(): GraphQLInterfaceType[];
     toString(): string;
     toJSON(): string;
     inspect(): string;
 }
 
-export interface GraphQLObjectTypeConfig<TSource, TContext> {
+type Unthunk<T> = T extends () => infer R ? R : T
+
+export interface GraphQLObjectTypeConfig<
+    TSource,
+    TContext,
+    TFields extends GraphQLFieldConfigMap<TSource, TContext> = any
+> {
     name: string;
     interfaces?: Thunk<Maybe<GraphQLInterfaceType[]>>;
-    fields: Thunk<GraphQLFieldConfigMap<TSource, TContext>>;
+    fields: Thunk<GraphQLFieldConfigMapFromConfig<TSource, TContext, TFields>>;
     isTypeOf?: Maybe<GraphQLIsTypeOfFn<TSource, TContext>>;
     description?: Maybe<string>;
     astNode?: Maybe<ObjectTypeDefinitionNode>;
@@ -356,12 +366,12 @@ export type GraphQLIsTypeOfFn<TSource, TContext> = (
     info: GraphQLResolveInfo
 ) => MaybePromise<boolean>;
 
-export type GraphQLFieldResolver<TSource, TContext, TArgs = { [argName: string]: any }> = (
+export type GraphQLFieldResolver<TSource, TContext, TArgs = { [argName: string]: any }, TResult = any> = (
     source: TSource,
     args: TArgs,
     context: TContext,
     info: GraphQLResolveInfo
-) => any;
+) => TResult;
 
 export interface GraphQLResolveInfo {
     readonly fieldName: string;
@@ -381,10 +391,14 @@ export type ResponsePath = {
     readonly key: string | number;
 };
 
-export interface GraphQLFieldConfig<TSource, TContext, TArgs = { [argName: string]: any }> {
-    type: GraphQLOutputType;
+export type ExtractPrimitiveFromGraphQL<T> =
+    T extends GraphQLScalarType<infer R> ? R :
+    any
+
+export interface GraphQLFieldConfig<TSource, TContext, TArgs = { [argName: string]: any }, TType extends GraphQLOutputType = GraphQLOutputType> {
+    type: TType;
     args?: GraphQLFieldConfigArgumentMap;
-    resolve?: GraphQLFieldResolver<TSource, TContext, TArgs>;
+    resolve?: GraphQLFieldResolver<TSource, TContext, TArgs, ExtractPrimitiveFromGraphQL<TType>>;
     subscribe?: GraphQLFieldResolver<TSource, TContext, TArgs>;
     deprecationReason?: Maybe<string>;
     description?: Maybe<string>;
@@ -400,8 +414,19 @@ export interface GraphQLArgumentConfig {
     astNode?: Maybe<InputValueDefinitionNode>;
 }
 
-export type GraphQLFieldConfigMap<TSource, TContext> = {
-    [key: string]: GraphQLFieldConfig<TSource, TContext>;
+export type GraphQLFieldConfigMap<
+    TSource,
+    TContext,
+> = {
+    [name: string]: GraphQLFieldConfig<TSource, TContext>;
+};
+
+export type GraphQLFieldConfigMapFromConfig<
+    TSource,
+    TContext,
+    TFields extends GraphQLFieldConfigMap<TSource, TContext> = any,
+> = {
+    [K in keyof TFields]: GraphQLFieldConfig<TSource, TContext, any, TFields[K]['type']>;
 };
 
 export interface GraphQLField<TSource, TContext, TArgs = { [key: string]: any }> {
