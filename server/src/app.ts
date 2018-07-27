@@ -15,7 +15,7 @@ import { graphiqlKoa } from 'apollo-server-koa'
 import { schema } from './schema'
 import { jwtSecret, graphqlPort } from './config'
 import { getUser } from './auth'
-import * as loaders from './loader'
+import loaders from './loader'
 
 const app = new Koa()
 const router = new Router()
