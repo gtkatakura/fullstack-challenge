@@ -30,7 +30,7 @@ export default class User implements Partial<UserDocument> {
   }
 }
 
-export const getLoader = () => new DataLoader(ids => mongooseLoader(UserModel, ids))
+export const getLoader = () => new DataLoader<string, UserDocument>(ids => mongooseLoader(UserModel, ids))
 
 const viewerCanSee = (context: GraphQLContext, data: UserDocument) => {
   // Anyone can see another user
