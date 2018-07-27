@@ -3,6 +3,9 @@
     "allowSyntheticDefaultImports": true,
     "target": "es5",
     "strict": true,
-    "noEmit": true
+    "noEmit": true,
+    "lib": [
+      "esnext"
+    ]
   }
 }

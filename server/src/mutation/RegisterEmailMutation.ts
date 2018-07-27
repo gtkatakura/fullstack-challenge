@@ -4,6 +4,13 @@ import { mutationWithClientMutationId } from 'graphql-relay'
 import { User } from '../model'
 import { generateToken } from '../auth'
 import pubSub, { EVENTS } from '../pubSub'
+import { EmailMutationOutputFields, EmailMutationOutputFieldsConfigMap } from './types/EmailMutation'
+
+type InputFields = {
+  name: string;
+  email: string;
+  password: string;
+}
 
 export default mutationWithClientMutationId({
   name: 'RegisterEmail',
@@ -18,7 +25,7 @@ export default mutationWithClientMutationId({
       type: new GraphQLNonNull(GraphQLString),
     },
   },
-  mutateAndGetPayload: async ({ name, email, password }) => {
+  mutateAndGetPayload: async ({ name, email, password }: InputFields): Promise<EmailMutationOutputFields> => {
     let user = await User.findOne({ email: email.toLowerCase() })
 
     if (user) {
@@ -51,5 +58,5 @@ export default mutationWithClientMutationId({
       type: GraphQLString,
       resolve: ({ error }) => error,
     },
-  },
+  } as EmailMutationOutputFieldsConfigMap,
 })

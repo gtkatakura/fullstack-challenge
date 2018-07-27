@@ -1,8 +1,7 @@
 //
 
-import mongoose from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 import bcrypt from 'bcryptjs'
-import { Schema } from 'inspector'
 import { ModelFromSchemaDefinition } from '../../types/mongoose'
 
 const definition = {
@@ -12,6 +11,7 @@ const definition = {
   },
   password: {
     type: String,
+    required: true,
     hidden: true,
   },
   email: {
@@ -25,9 +25,20 @@ const definition = {
   },
 }
 
-export type IUser = ModelFromSchemaDefinition<typeof definition> & mongoose.Document
+type ISchemaDefinition = ModelFromSchemaDefinition<typeof definition>
 
-const Schema = new mongoose.Schema(definition, {
+const methods = {
+  authenticate (this: ISchemaDefinition, plainTextPassword: string) {
+    return bcrypt.compareSync(plainTextPassword, this.password)
+  },
+  encryptPassword (password: string) {
+    return bcrypt.hashSync(password, 8)
+  },
+}
+
+export type UserDocument = mongoose.Document & ISchemaDefinition & typeof methods
+
+const UserSchema = new mongoose.Schema(definition, {
   timestamps: {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
@@ -35,7 +46,9 @@ const Schema = new mongoose.Schema(definition, {
   collection: 'user',
 })
 
-Schema.pre<IUser>('save', function (next) {
+UserSchema.methods = methods
+
+UserSchema.pre<UserDocument>('save', function (next) {
   // Hash the password
   if (this.isModified('password')) {
     this.password = this.encryptPassword(this.password)
@@ -44,13 +57,4 @@ Schema.pre<IUser>('save', function (next) {
   return next()
 })
 
-Schema.methods = {
-  authenticate (plainTextPassword) {
-    return bcrypt.compareSync(plainTextPassword, this.password)
-  },
-  encryptPassword (password) {
-    return bcrypt.hashSync(password, 8)
-  },
-}
-
-export default mongoose.model<IUser>('User', Schema)
+export default mongoose.model<UserDocument>('User', UserSchema)

@@ -1,17 +1,23 @@
 //
 import DataLoader from 'dataloader'
-import { User as UserModel } from '../../model/index'
+import { User as UserModel } from '../../model'
 import { connectionFromMongoCursor, mongooseLoader } from '@entria/graphql-mongoose-loader'
-import { IUser } from './UserModel'
+import { UserDocument } from './UserModel'
+import { GraphQLContext } from '../../TypeDefinition'
+import { ConnectionArguments } from 'graphql-relay'
 
-export default class User implements Partial<IUser> {
+type UserConnectionArguments = ConnectionArguments & {
+  search?: string;
+}
+
+export default class User implements Partial<UserDocument> {
   id: string
   _id: string
   name: string
   email?: string
   active?: boolean
 
-  constructor (data: IUser, { user }: { user?: IUser }) {
+  constructor (data: UserDocument, { user }: { user?: UserDocument }) {
     this.id = data.id
     this._id = data._id
     this.name = data.name
@@ -26,12 +32,12 @@ export default class User implements Partial<IUser> {
 
 export const getLoader = () => new DataLoader(ids => mongooseLoader(UserModel, ids))
 
-const viewerCanSee = (context, data) => {
+const viewerCanSee = (context: GraphQLContext, data: UserDocument) => {
   // Anyone can see another user
   return true
 }
 
-export const load = async (context, id) => {
+export const load = async (context: GraphQLContext, id: string) => {
   if (!id) {
     return null
   }
@@ -45,11 +51,11 @@ export const load = async (context, id) => {
   return viewerCanSee(context, data) ? new User(data, context) : null
 }
 
-export const clearCache = ({ dataloaders }, id) => {
+export const clearCache = ({ dataloaders }: GraphQLContext, id) => {
   return dataloaders.UserLoader.clear(id.toString())
 }
 
-export const loadUsers = async (context, args) => {
+export const loadUsers = async (context: GraphQLContext, args: UserConnectionArguments) => {
   const where = args.search ? { name: { $regex: new RegExp(`^${args.search}`, 'ig') } } : {}
   const users = UserModel.find(where, { _id: 1 }).sort({ createdAt: -1 })
 

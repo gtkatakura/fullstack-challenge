@@ -1,8 +1,10 @@
 //
 
-import { GraphQLObjectType, GraphQLString, GraphQLBoolean } from 'graphql'
+import { GraphQLObjectType, GraphQLString, GraphQLBoolean, GraphQLObjectTypeConfig } from 'graphql'
 import { globalIdField } from 'graphql-relay'
 import { registerType, nodeInterface } from '../../interface/NodeInterface'
+import User from './UserLoader'
+import { GraphQLContext } from '../../TypeDefinition'
 
 export default registerType(
   new GraphQLObjectType({
@@ -28,5 +30,5 @@ export default registerType(
       },
     }),
     interfaces: () => [nodeInterface],
-  }),
+  } as GraphQLObjectTypeConfig<User, GraphQLContext>),
 )

@@ -1,9 +1,15 @@
 //
-import { GraphQLString, GraphQLNonNull } from 'graphql'
+import { GraphQLString, GraphQLNonNull, GraphQLFieldConfigMap } from 'graphql'
 import { mutationWithClientMutationId } from 'graphql-relay'
 
 import { User } from '../model'
 import { generateToken } from '../auth'
+import { EmailMutationOutputFields, EmailMutationOutputFieldsConfigMap } from './types/EmailMutation'
+
+type InputFields = {
+  email: string;
+  password: string;
+}
 
 export default mutationWithClientMutationId({
   name: 'LoginEmail',
@@ -15,7 +21,7 @@ export default mutationWithClientMutationId({
       type: new GraphQLNonNull(GraphQLString),
     },
   },
-  mutateAndGetPayload: async ({ email, password }) => {
+  mutateAndGetPayload: async ({ email, password }: InputFields): Promise<EmailMutationOutputFields> => {
     const user = await User.findOne({ email: email.toLowerCase() })
 
     if (!user) {
@@ -48,5 +54,5 @@ export default mutationWithClientMutationId({
       type: GraphQLString,
       resolve: ({ error }) => error,
     },
-  },
+  } as EmailMutationOutputFieldsConfigMap,
 })
